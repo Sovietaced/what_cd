@@ -1,6 +1,18 @@
 #!/usr/bin/ruby 
 require 'shellwords'
 
+''' 
+  This tool is primarily for working through better.php with ease. 
+  Essentially this tool will look at an existing release directory with 
+  FLAC files and create a matching release with MP3 V0 files. A best attempt
+  is made to create an appropriate folder name. Any non-flac files are moved
+  over and then flac files are converted to MP3 V0. 
+
+  Dependencies: 
+    flac2mp3: https://github.com/ymendel/flac2mp3
+
+'''
+
 def convert(dir, new_dir) 
   mp3_files = `ls #{Shellwords.escape(dir)}| grep mp3`
 
