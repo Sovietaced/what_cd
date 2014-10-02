@@ -14,22 +14,42 @@ require 'shellwords'
 '''
 
 def convert(dir, new_dir) 
-  mp3_files = `ls #{Shellwords.escape(dir)}| grep mp3`
 
-  if mp3_files.empty?
-    puts "No MP3 files found. Converting!"
+  flac_files = Dir.entries(dir).select { |e| e.include? '.flac' }
 
-    flac_files = Dir.entries(dir).select { |e| e.include? '.flac' }
-
-    flac_files.each do |flac_file|
-      cmd = "cd #{Shellwords.escape(new_dir)}; flac2mp3 #{Shellwords.escape(dir +  flac_file)}"
-      system "bash -c \"#{cmd}\""
-    end
+  if flac_files.empty?
+    puts "No flac files found. Exiting"
+    exit
   end
+
+  flac_files.each do |flac_file|
+    puts "Converting #{flac_file}"
+    cmd = "cd #{Shellwords.escape(new_dir)}; flac2mp3 #{Shellwords.escape(dir +  flac_file)} > /dev/null 2>&1"
+    output = system "bash -c \"#{cmd}\""
+  end
+end
+
+def determine_new_dir_name(new_dir)
+  if new_dir.include? 'FLAC'
+    new_dir.gsub! 'FLAC', 'MP3 V0'
+  else
+    new_dir.gsub! '/', ' [MP3 V0]/'
+  end
+end
+
+def copy_files(dir, new_dir)
+  # Copy all files from dir to new_dir
+  cmd = "cp -r #{Shellwords.escape(dir)}/* #{Shellwords.escape(new_dir)}"
+  system "bash -c \"#{cmd}\""
+
+  # Remove any flac files, as they will be replaced by MP#s
+  cmd = "rm #{Shellwords.escape(new_dir)}*.flac"
+  system "bash -c \"#{cmd}\""
 end
 
 def main
 
+  #TODO: bring this out...
   if ARGV.empty?
     puts "Missing folder argument"
     return
@@ -37,17 +57,19 @@ def main
     puts "This only takes a single arg..."
     return
   end
+
   # parse CLI args
   dir = ARGV[0].dup
+
+  # clear up inconsistencies
+  if dir.chars.last != '/'
+    dir = dir + '/'
+  end
+
   # Since mutable
   new_dir = dir.dup
 
-  if dir.include? 'FLAC'
-    new_dir.gsub! 'FLAC', 'MP3 V0'
-  else
-    # append new name
-    new_dir.gsub! '/', ' [MP3 V0]/'
-  end
+  determine_new_dir_name(new_dir)
 
   # Attach to full path
   dir = Dir.pwd + "/" + dir
@@ -56,17 +78,13 @@ def main
   # Create the new directory if it does not exist
   Dir.mkdir(new_dir) unless File.exists?(new_dir)
 
-
-  # Copy all files from dir to new_dir
-  cmd = "cp -r #{Shellwords.escape(dir)} #{Shellwords.escape(new_dir)}"
-  system "bash -c \"#{cmd}\""
-
-  # Remove any flac files, as they will be replaced by MP#s
-  cmd = "rm #{Shellwords.escape(new_dir)}*.flac"
-  system "bash -c \"#{cmd}\""
+  copy_files(dir,new_dir)
 
   # Finally, convert to MP3 V0 if necessary
   convert(dir, new_dir)
+
+  puts "Woot! Conversion successful!"
+  puts "Find your files in #{new_dir}"
 end
 
 # Start
