@@ -29,9 +29,12 @@ def convert(dir, new_dir)
   end
 end
 
+# Intelligently decide on a new directory name
 def determine_new_dir_name(new_dir)
   if new_dir.include? 'FLAC'
     new_dir.gsub! 'FLAC', 'MP3 V0'
+  elsif new_dir.include? 'flac'
+    new_dir.gsub! 'flac', 'MP3 V0'
   else
     new_dir.gsub! '/', ' [MP3 V0]/'
   end
@@ -47,18 +50,30 @@ def copy_files(dir, new_dir)
   system "bash -c \"#{cmd}\""
 end
 
-def main
+# Handle command line arguments for errors
+def handle_args
 
-  #TODO: bring this out...
   if ARGV.empty?
-    puts "Missing folder argument"
-    return
+    puts "Missing folder argument. Exiting..."
+    exit
   elsif ARGV.count > 1
-    puts "This only takes a single arg..."
-    return
+    puts "This only takes a single arg. Exiting..."
+    exit
   end
 
-  # parse CLI args
+  # Exit is supplied directory doesn't exist
+  if not File.directory? ARGV[0]
+    puts "Supplied directory does not exist. Exiting..."
+    exit
+  end
+
+end
+
+def main
+
+  handle_args
+
+  # First arg is existing release dir
   dir = ARGV[0].dup
 
   # clear up inconsistencies
