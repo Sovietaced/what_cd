@@ -22,7 +22,7 @@ Options are:
 BANNER
   opts.separator ''
   opts.on('-v', '--version',
-          "Show the #{File.basename($0)} version number and exit") { require 'what-cd/version'; puts "what-cd #{WhatCD::VERSION::STRING}"; exit }
+          "Show the #{File.basename($0)} version number and exit") { require 'what-cd/version'; puts "what-cd #{WhatCD::VERSION}"; exit }
   opts.on('-h', '--help',
           'Show this help message.') { puts opts; exit }
   opts.parse!(ARGV)
@@ -30,7 +30,4 @@ BANNER
   if MANDATORY_OPTIONS && MANDATORY_OPTIONS.find { |option| OPTIONS[option.to_sym].nil? }
     puts opts; exit
   end
-end
-
-# do stuff
 end
