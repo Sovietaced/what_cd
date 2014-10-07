@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["sovietaced@gmail.com"]
   s.homepage    = "https://github.com/Sovietaced/what-cd"
   s.files       = Dir['README.md', 'lib/**/*', 'bin/**/*']
+  s.executables = ['what-cd']
 
   s.add_dependency "flac2mp3"
   s.add_dependency "mktorrent"
