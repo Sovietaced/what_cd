@@ -7,7 +7,7 @@ rescue LoadError
 end
 
 require 'optparse'
-require 'what_cd'
+require '../lib/what_cd'
 
 OPTIONS = {}
 MANDATORY_OPTIONS = %w[]
@@ -36,5 +36,10 @@ BANNER
   # do stuff
   dir = ARGV[0]
 
-  #WhatCD.convert(dir, OPTIONS)
+  unless dir
+    puts "Usage: #{File.basename($0)} [directory]"
+    exit
+  end
+
+  WhatCD.convert(dir, OPTIONS)
 end
