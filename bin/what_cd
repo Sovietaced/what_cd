@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-#
 
 begin
   require 'rubygems'
@@ -8,11 +7,10 @@ rescue LoadError
 end
 
 require 'optparse'
-require 'what-cd'
+require 'what_cd'
 
 OPTIONS = {}
 MANDATORY_OPTIONS = %w[]
-meta = false
 
 parser = OptionParser.new do |opts|
   opts.banner = <<BANNER
@@ -23,11 +21,20 @@ BANNER
   opts.separator ''
   opts.on('-v', '--version',
           "Show the #{File.basename($0)} version number and exit") { require 'what-cd/version'; puts "what-cd #{WhatCD::VERSION}"; exit }
+  opts.on('-t', '--tracker',
+          "Create torrent file with tracker") { |tracker|  OPTIONS[:tracker] = tracker }
+  opts.on('-e', '--encoding', String,
+          "Set lame encoding options", "Default: #{WhatCD.default_encoding}") { |encoding|  OPTIONS[:encoding] = encoding }
   opts.on('-h', '--help',
-          'Show this help message.') { puts opts; exit }
+          'Show this help message.') { puts opts; exit }  
   opts.parse!(ARGV)
 
   if MANDATORY_OPTIONS && MANDATORY_OPTIONS.find { |option| OPTIONS[option.to_sym].nil? }
     puts opts; exit
   end
+
+  # do stuff
+  dir = ARGV[0]
+
+  #WhatCD.convert(dir, OPTIONS)
 end
