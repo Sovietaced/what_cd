@@ -6,40 +6,27 @@ rescue LoadError
   # no rubygems to load, so we fail silently
 end
 
-require 'optparse'
-require '../lib/what_cd'
+require 'escort'
+require '../lib/what_cd/version'
+require '../lib/what_cd/commands/clean_command'
 
-OPTIONS = {}
-MANDATORY_OPTIONS = %w[]
 
-parser = OptionParser.new do |opts|
-  opts.banner = <<BANNER
-Usage: #{File.basename($0)} [directory]
+Escort::App.create do |app|
+  app.version WhatCD::VERSION
+  app.summary "Useful What.CD tools"
 
-Options are:
-BANNER
-  opts.separator ''
-  opts.on('-v', '--version',
-          "Show the #{File.basename($0)} version number and exit") { require 'what-cd/version'; puts "what-cd #{WhatCD::VERSION}"; exit }
-  opts.on('-t', '--tracker',
-          "Create torrent file with tracker") { |tracker|  OPTIONS[:tracker] = tracker }
-  opts.on('-e', '--encoding', String,
-          "Set lame encoding options", "Default: #{WhatCD.default_encoding}") { |encoding|  OPTIONS[:encoding] = encoding }
-  opts.on('-h', '--help',
-          'Show this help message.') { puts opts; exit }  
-  opts.parse!(ARGV)
+  app.command :clean  do |command|
+    command.summary "Clean files in a directory per What.CD spec"
+    command.description "Clean"
 
-  if MANDATORY_OPTIONS && MANDATORY_OPTIONS.find { |option| OPTIONS[option.to_sym].nil? }
-    puts opts; exit
+    command.options do |opts|
+      opts.opt :option1, "Option1 for command1", :short => '-o', :long => '--option1', :type => :string, :default => "option 1 command 1"
+      opts.opt :flag_for_command1, "Flag for command 1", :short => :none, :long => '--flag-for-command1', :type => :boolean
+
+    end
+
+    command.action do |options, arguments|
+      Escort::CleanCommand.new(options, arguments).execute
+    end
   end
-
-  # do stuff
-  dir = ARGV[0]
-
-  unless dir
-    puts "Usage: #{File.basename($0)} [directory]"
-    exit
-  end
-
-  WhatCD.convert(dir, OPTIONS)
 end
