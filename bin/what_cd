@@ -20,8 +20,7 @@ Escort::App.create do |app|
     command.description "Clean"
 
     command.options do |opts|
-      opts.opt :option1, "Option1 for command1", :short => '-o', :long => '--option1', :type => :string, :default => "option 1 command 1"
-      opts.opt :flag_for_command1, "Flag for command 1", :short => :none, :long => '--flag-for-command1', :type => :boolean
+      opts.opt :dir, "Directory to clean", :short => '-d', :long => '--dir', :type => :string
 
     end
 
