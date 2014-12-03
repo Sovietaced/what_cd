@@ -119,11 +119,11 @@ module Escort
       #Escort::Logger.output.puts "Options: #{options}"
       Escort::Logger.output.puts "Command options: #{command_options}"
       Escort::Logger.output.puts "Arguments: #{arguments}"
-      if command_options[:dir]
-        dir = command_options[:dir]
+      if arguments.length > 0
+        dir = arguments[0]
         run(dir)
       else
-        puts "Missing directory option"
+        puts "Missing directory argument"
       end
     end
   end

@@ -9,6 +9,7 @@ end
 require 'escort'
 require '../lib/what_cd/version'
 require '../lib/what_cd/commands/clean_command'
+require '../lib/what_cd/commands/artists_command'
 
 
 Escort::App.create do |app|
@@ -19,13 +20,18 @@ Escort::App.create do |app|
     command.summary "Clean files in a directory per What.CD spec"
     command.description "Clean"
 
-    command.options do |opts|
-      opts.opt :dir, "Directory to clean", :short => '-d', :long => '--dir', :type => :string
-
-    end
-
     command.action do |options, arguments|
       Escort::CleanCommand.new(options, arguments).execute
     end
   end
+
+  app.command :artists  do |command|
+    command.summary "Gets a list of artists from a release directory"
+    command.description "Artists"
+
+    command.action do |options, arguments|
+      Escort::ArtistsCommand.new(options, arguments).execute
+    end
+  end
+  
 end
