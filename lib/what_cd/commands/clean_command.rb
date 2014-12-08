@@ -6,11 +6,14 @@ module Escort
     def fix_tags(old_path, filename)
       Mp3Info.open(old_path) do |mp3|
         # Remove all comments
-        if mp3.tag.comments or mp3.tag2.COMM
-          puts "Removing tags"
+        if not mp3.tag.comments.nil? or not mp3.tag2.COMM.nil?
+          puts "Removing comment tags"
           mp3.tag.comments = nil
           mp3.tag2.COMM = nil
         end
+
+        # Handle publisher tag
+        mp3.tag2.TPUB = nil         
 
         # Create a perfect file name if possible
         if mp3.tag.title and mp3.tag.artist and mp3.tag.tracknum
