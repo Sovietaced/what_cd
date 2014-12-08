@@ -82,8 +82,32 @@ module Escort
       return filename
     end
 
+    def fix_dir(dir)
+      # Get folder metadata from the first valid file
+      Dir.entries(dir).each do |f|
+        if !File.directory?(f) and File.extname(f) == ".mp3"
+          file_path = dir + f
+          Mp3Info.open(file_path) do |mp3|
+            if mp3.tag.album
+              new_dir = mp3.tag.album
+              # Add year if available
+              if mp3.tag.year 
+                new_dir = new_dir + " #{mp3.tag.year}"
+              end
+
+              parts = dir.split("/")
+              parts[-1] = new_dir
+              return parts.join("/")
+            end
+          end
+        end
+      end
+      return dir
+    end 
+
     def run(dir)
 
+      # Handle files first
       Dir.entries(dir).each do |f|
         if !File.directory? f
           filename = File.basename(f, File.extname(f))
@@ -112,9 +136,16 @@ module Escort
           else
             puts "Nothing has changed. Not renaming file"
           end
-
         end
       end
+
+      # Handle dir
+      new_dir = fix_dir(dir)
+
+      if new_dir != dir 
+        puts "Renaming directory to #{new_dir}"
+        File.rename(dir, new_dir)
+       end
     end
 
     def execute
