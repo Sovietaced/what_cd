@@ -92,7 +92,7 @@ module Escort
               new_dir = mp3.tag.album
               # Add year if available
               if mp3.tag.year 
-                new_dir = new_dir + " #{mp3.tag.year}"
+                new_dir = new_dir + " [#{mp3.tag.year}]"
               end
 
               parts = dir.split("/")
@@ -114,6 +114,14 @@ module Escort
           old_path = dir + f
           puts "Processing #{filename}"
 
+          # Remove hidden files
+          if filename.start_with? "."
+            puts "Deleting hidden file #{filename}"
+            FileUtils.rm_rf filename
+            # skip to next iteration
+            next
+          end
+
           # Fix Tags
           if File.extname(f) == ".mp3"
             # fix tags
@@ -123,9 +131,6 @@ module Escort
             # Add paren to mix
             filename = add_mix_paren(filename)
           end
-
-          # Underscore -> Space
-          filename = filename.gsub('_', ' ')
 
           # Finally rename the file
           new_path = dir + filename + File.extname(f)
