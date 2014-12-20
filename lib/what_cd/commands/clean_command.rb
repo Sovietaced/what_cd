@@ -105,6 +105,10 @@ module Escort
       return dir
     end 
 
+    def handle_jpg(filename)
+      filename = "00. cover"
+    end
+
     def run(dir)
 
       # Handle files first
@@ -130,6 +134,8 @@ module Escort
             filename = fix_track_num(filename)
             # Add paren to mix
             filename = add_mix_paren(filename)
+          elsif File.extname(f) == ".jpg"
+            filename = handle_jpg(filename)
           end
 
           # Finally rename the file
@@ -147,7 +153,7 @@ module Escort
       # Handle dir
       new_dir = fix_dir(dir)
 
-      if new_dir != dir 
+      if new_dir != dir.chomp("/")
         puts "Renaming directory to #{new_dir}"
         File.rename(dir, new_dir)
        end
