@@ -8,8 +8,8 @@ end
 
 require 'escort'
 require '../lib/what_cd/version'
-require '../lib/what_cd/commands/clean_command'
-require '../lib/what_cd/commands/artists_command'
+require '../lib/what_cd/commands/clean/clean_command'
+require '../lib/what_cd/commands/metadata/metadata'
 
 
 Escort::App.create do |app|
