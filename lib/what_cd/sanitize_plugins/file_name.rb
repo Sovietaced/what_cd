@@ -18,17 +18,15 @@ class FileName
   end
 
   def sanitize(path)
-    Dir.entries(path).each do |f|
-      if !File.directory?(f) and File.extname(f) == ".mp3"
-        file_name = f
-        file_path = path + file_name
+    Dir.chdir(path) { Dir["*.mp3"] }.each do |f|
+      file_name = f
+      file_path = path + file_name
 
-        new_file_name = get_fixed_file_name(file_path)
+      new_file_name = get_fixed_file_name(file_path)
 
-        if new_file_name != file_name
-          new_file_path = path + new_file_name
-          File.rename(file_path, new_file_path)
-        end
+      if new_file_name != file_name
+        new_file_path = path + new_file_name
+        File.rename(file_path, new_file_path)
       end
     end
 

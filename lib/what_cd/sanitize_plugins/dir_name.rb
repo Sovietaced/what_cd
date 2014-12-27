@@ -25,10 +25,14 @@ class DirName
       Mp3Info.open(file_path) do |mp3|
         if mp3.tag.album
           new_dir = mp3.tag.album
+          
           # Add year if available
           if mp3.tag.year 
             new_dir = new_dir + " [#{mp3.tag.year}]"
           end
+
+          quality = get_quality_string(mp3.bitrate, mp3.vbr)
+          new_dir = new_dir + " #{quality}"
 
           parts = path.split("/")
           parts[-1] = new_dir
@@ -55,5 +59,17 @@ class DirName
     end
 
     return nil
+  end
+
+  def get_quality_string(bitrate, vbr)
+    if vbr
+      if bitrate > 230 
+        return "[MP3 V0]"
+      elsif bitrate > 190
+        return "[MP3 V2]"
+      end
+    else
+      return "[MP3 #{bitrate}]"
+    end
   end
 end
