@@ -9,7 +9,11 @@ class Cover
   def initialize
     @log = Logging.logger[self]
     @log.appenders = Logging.appenders.stdout
-    @log.level = :info
+    if $verbose
+      @log.level = :debug
+    else
+      @log.level = :info
+    end
   end
 
   def sanitize(path)

@@ -13,8 +13,7 @@ program :name, 'WHAT.CD'
 program :version, WhatCD::VERSION
 program :description, 'WHAT.CD tools'
 
-log = Logging.logger(STDOUT)
-log.level = :warn
+global_option('--verbose') { $verbose = true }
 
 command :sanitize do |c|
   c.syntax = 'what_cd sanitize [dir]'
@@ -22,7 +21,6 @@ command :sanitize do |c|
   c.action do |args, options|
     raise ArgumentError.new("dir argument required") unless args.count > 0
     path = sanitize_path(args[0])
-    puts path
     Sanitize.run(path)
   end
 end

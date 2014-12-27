@@ -5,7 +5,11 @@ class Sanitize
 
   @log = Logging.logger[self]
   @log.appenders = Logging.appenders.stdout
-  @log.level = :info
+  if $verbose
+    @log.level = :debug
+  else
+    @log.level = :info
+  end
 
   def self.run(path)
     

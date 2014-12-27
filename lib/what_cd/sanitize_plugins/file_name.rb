@@ -10,7 +10,11 @@ class FileName
   def initialize
     @log = Logging.logger[self]
     @log.appenders = Logging.appenders.stdout
-    @log.level = :warn
+    if $verbose
+      @log.level = :debug
+    else
+      @log.level = :info
+    end
   end
 
   def sanitize(path)
@@ -37,7 +41,7 @@ class FileName
 
     Mp3Info.open(file_path) do |mp3|
       if mp3.tag.title and mp3.tag.artist and mp3.tag.tracknum
-        @log.info "Reconstructing file name"
+        @log.debug "Reconstructing file name for #{file_path}"
         title = mp3.tag.title
         artist = mp3.tag.artist
         tracknum = mp3.tag.tracknum.to_s

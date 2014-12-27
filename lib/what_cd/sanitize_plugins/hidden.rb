@@ -10,7 +10,11 @@ class Hidden
   def initialize
     @log = Logging.logger[self]
     @log.appenders = Logging.appenders.stdout
-    @log.level = :warn
+    if $verbose
+      @log.level = :debug
+    else
+      @log.level = :info
+    end
   end
 
   def sanitize(path)
