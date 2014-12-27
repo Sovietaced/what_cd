@@ -1,5 +1,7 @@
 # what_cd
-Making contributing to what.cd less tedious.
+What.cd has a long list of very strict rules that make it an **amazing** place. Given all these rules, 
+contributing to What.CD can be intimidating. what_cd makes contributing easier by santizing releases so 
+that you don't have to.
 
 ## Installation
 ```bash
