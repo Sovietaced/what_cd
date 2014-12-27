@@ -1,37 +1,40 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'rubygems'
-rescue LoadError
-  # no rubygems to load, so we fail silently
+require 'rubygems'
+require 'commander/import'
+require 'logging'
+require 'pathname'
+
+require '../lib/what_cd/version'
+require '../lib/what_cd/sanitize'
+
+# :name is optional, otherwise uses the basename of this executable
+program :name, 'WHAT.CD'
+program :version, WhatCD::VERSION
+program :description, 'WHAT.CD tools'
+
+log = Logging.logger(STDOUT)
+log.level = :warn
+
+command :sanitize do |c|
+  c.syntax = 'what_cd sanitize [dir]'
+  c.description = 'Displays foo'
+  c.action do |args, options|
+    raise ArgumentError.new("dir argument required") unless args.count > 0
+    path = sanitize_path(args[0])
+    puts path
+    Sanitize.run(path)
+  end
 end
 
-require 'escort'
-require '../lib/what_cd/version'
-require '../lib/what_cd/commands/clean/clean_command'
-require '../lib/what_cd/commands/metadata/metadata'
+def sanitize_path(path)
+  # Force add a trailing '/'
+  #path = path.chomp('/')
+  #path << '/'
 
-
-Escort::App.create do |app|
-  app.version WhatCD::VERSION
-  app.summary "Useful What.CD tools"
-
-  app.command :clean  do |command|
-    command.summary "Clean files in a directory per What.CD spec"
-    command.description "Clean"
-
-    command.action do |options, arguments|
-      Escort::CleanCommand.new(options, arguments).execute
-    end
+  if (Pathname.new(path).absolute?)
+    return path
+  else 
+    return Dir.pwd + '/' + path
   end
-
-  app.command :artists  do |command|
-    command.summary "Gets a list of artists from a release directory"
-    command.description "Artists"
-
-    command.action do |options, arguments|
-      Escort::ArtistsCommand.new(options, arguments).execute
-    end
-  end
-  
 end
