@@ -29,10 +29,6 @@ class Hidden
       end
     end
 
-    Dir.entries(path).each do |entry|
-      @log.debug entry
-    end
-
     return nil
   end
 end
