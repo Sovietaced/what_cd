@@ -14,22 +14,24 @@ module Sanitize
 
   # Load from config file
   def self.run(path)
-      
-    # Get this direciton
-    current_dir = File.dirname(__FILE__)
 
     # Load configured plugins
     begin
+      # Get config
       config = YAML.load_file(WhatCD::CONFIG)
+      # Get configured plugins
       configured_plugins = config['commands']['sanitize']['plugins']
-
-      run_plugins(configured_plugins)
+      # Run them
+      self.run_plugins(path, configured_plugins)
     rescue Errno::ENOENT
       @log.error "Missing gem config file '~/.what_cd'"
     end 
   end
 
-  def run_plugins(configured_plugins)
+  def self.run_plugins(path, configured_plugins)
+    # Get this directory
+    current_dir = File.dirname(__FILE__)
+
     # Iterate over the configured plugins and dynamically execute them
     configured_plugins.each do |configured_plugin|
       file = "#{current_dir}/sanitize_plugins/#{configured_plugin}.rb"

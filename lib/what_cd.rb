@@ -4,6 +4,7 @@ require 'logging'
 
 module WhatCD
 
+  # YAML config 
   CONFIG = "#{Dir.home}/.what_cd"
 
 end
