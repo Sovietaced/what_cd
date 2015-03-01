@@ -23,10 +23,14 @@ class Hidden
       if !File.directory? entry
         # Remove hidden files
         if entry.start_with? "."
-          @log.debug "Deleting hidden file #{entry}"
-          FileUtils.rm_rf entry
+          @log.debug "Deleting hidden file #{path + entry}"
+          FileUtils.rm_rf(path + entry)
         end
       end
+    end
+
+    Dir.entries(path).each do |entry|
+      @log.debug entry
     end
 
     return nil
