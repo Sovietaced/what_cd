@@ -1,7 +1,8 @@
 require 'logging'
 require 'active_support/all'
+require 'yaml'
 
-class Sanitize
+module Sanitize
 
   @log = Logging.logger[self]
   @log.appenders = Logging.appenders.stdout
@@ -11,13 +12,20 @@ class Sanitize
     @log.level = :info
   end
 
+  # Load from config file
   def self.run(path)
-    
+      
+    # Get this direciton
     current_dir = File.dirname(__FILE__)
 
-    # Sort for consistency
-    Dir["#{current_dir}/sanitize_plugins/*.rb"].sort.each do |file| 
-      require file 
+    # Load configured plugins
+    config = YAML.load_file(WhatCD::CONFIG)
+    configured_plugins = config['commands']['sanitize']['plugins']
+
+    # Iterate over the configured plugins and dynamically execute them
+    configured_plugins.each do |configured_plugin|
+      file = "#{current_dir}/sanitize_plugins/#{configured_plugin}.rb"
+      require file
       file_name = File.basename(file, '.rb')
        # using ActiveSupport for camelcase and constantize
       plugin = file_name.camelcase.constantize

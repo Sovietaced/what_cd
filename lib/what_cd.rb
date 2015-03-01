@@ -2,6 +2,8 @@ $:.unshift File.dirname(__FILE__)
 
 require 'logging'
 
-class WhatCD
+module WhatCD
+
+  CONFIG = "#{Dir.home}/.what_cd"
 
 end

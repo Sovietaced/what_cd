@@ -22,6 +22,7 @@ class DirName
     file_path = get_first_mp3_path(path)
 
     if file_path
+      @log.debug "Opening file_path #{file_path}"
       Mp3Info.open(file_path) do |mp3|
         if mp3.tag.album
           new_dir = mp3.tag.album

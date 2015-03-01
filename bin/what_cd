@@ -5,6 +5,7 @@ require 'commander/import'
 require 'logging'
 require 'pathname'
 
+require '../lib/what_cd'
 require '../lib/what_cd/version'
 require '../lib/what_cd/sanitize'
 
