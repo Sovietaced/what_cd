@@ -1,0 +1,10 @@
+--- 
+commands: 
+  sanitize:
+    plugins: 
+    - hidden
+    - bitrate
+    - cover
+    - dir_name
+    - file_name
+    - tags
