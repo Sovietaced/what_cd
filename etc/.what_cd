@@ -2,7 +2,7 @@
 commands: 
   sanitize:
     plugins: 
-    - hidden
+    - hidden # Remove hidden files first as it can mess with things later
     - bitrate
     - cover
     - dir_name
