@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.files       = Dir['README.md', 'lib/**/*', 'bin/**/*']
   s.executables = ['what_cd']
 
-  s.add_dependency "flac2mp3"
+  s.add_dependency "commander"
+  s.add_dependency "mp3info"
   s.add_dependency "mktorrent"
 end
