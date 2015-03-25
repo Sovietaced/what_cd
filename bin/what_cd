@@ -8,6 +8,7 @@ require 'pathname'
 require '../lib/what_cd'
 require '../lib/what_cd/version'
 require '../lib/what_cd/sanitize'
+require '../lib/what_cd/better'
 
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'WHAT.CD'
@@ -18,11 +19,26 @@ global_option('--verbose') { $verbose = true }
 
 command :sanitize do |c|
   c.syntax = 'what_cd sanitize [dir]'
-  c.description = 'Displays foo'
+  c.description = 'Sanitizes releases'
   c.action do |args, options|
+    # Preconditions
     raise ArgumentError.new("dir argument required") unless args.count > 0
     path = sanitize_path(args[0])
     Sanitize.run(path)
+  end
+end
+
+command :better do |c|
+  c.syntax = 'what_cd better [args] [dir]'
+  c.description = 'Converts FLAC releases to MP3'
+  c.option '--quality [320/V0]', String, 'Specifies what quality MP3 to convert to'
+  c.action do |args, options|
+    # Preconditions
+    raise ArgumentError.new("dir argument required") unless args.count > 0
+    raise ArgumentError.new("quality option required") unless options.quality
+    raise ArgumentError.new("specified quality invalid. Must be 320 or V0") unless options.quality == "320" || options.quality == "V0"
+    path = sanitize_path(args[0])
+    Better.run(path, options.quality)
   end
 end
 
