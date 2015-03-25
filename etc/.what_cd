@@ -8,3 +8,8 @@ commands:
     - dir_name
     - file_name
     - tags
+  
+  better:
+    plugins:
+    - new_dir
+    

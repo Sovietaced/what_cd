@@ -38,7 +38,7 @@ command :better do |c|
     raise ArgumentError.new("quality option required") unless options.quality
     raise ArgumentError.new("specified quality invalid. Must be 320 or V0") unless options.quality == "320" || options.quality == "V0"
     path = sanitize_path(args[0])
-    Better.run(path, options.quality)
+    Better.run(path, options.quality, $verbose)
   end
 end
 
