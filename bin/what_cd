@@ -9,6 +9,7 @@ require '../lib/what_cd'
 require '../lib/what_cd/version'
 require '../lib/what_cd/sanitize'
 require '../lib/what_cd/better'
+require '../lib/what_cd/metadata'
 
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'WHAT.CD'
@@ -25,6 +26,17 @@ command :sanitize do |c|
     raise ArgumentError.new("dir argument required") unless args.count > 0
     path = sanitize_path(args[0])
     Sanitize.run(path)
+  end
+end
+
+command :metadata do |c|
+  c.syntax = 'what_cd metadata [dir]'
+  c.description = 'Gets release metadata for uploading'
+  c.action do |args, options|
+    # Preconditions
+    raise ArgumentError.new("dir argument required") unless args.count > 0
+    path = sanitize_path(args[0])
+    Metadata.run(path)
   end
 end
 

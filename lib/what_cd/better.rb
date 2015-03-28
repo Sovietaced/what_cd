@@ -16,7 +16,7 @@ module Better
   @log = Logging.logger[self]
   @log.appenders = Logging.appenders.stdout
 
-  def self.setup_log(verbose)
+  def self. setup_log(verbose)
     if verbose
       @log.level = :debug
     else
