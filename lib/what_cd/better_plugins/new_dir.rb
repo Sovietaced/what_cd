@@ -21,11 +21,11 @@ class NewDir
     quality = context[:quality]
     new_path = determine_new_dir_name(path, quality)
 
-    @log.info "Creating path for MP3 files at #{new_path}"
+    @log.info "Creating path for MP3 files at #{new_path} and copying files over"
     # Create the new directory if it does not exist
-    Dir.mkdir(new_path) unless File.exists?(new_path)
+    FileUtils.cp_r path, new_path unless File.exists?(new_path)
 
-    context[:new_path] = new_path
+    context[:path] = new_path
     return context
   end
 
