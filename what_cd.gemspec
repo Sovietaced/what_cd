@@ -16,4 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency "commander"
   s.add_dependency "mp3info"
   s.add_dependency "mktorrent"
+  s.add_dependency "yaml"
+  s.add_dependency "logging"
+  s.add_dependency "pathname"
 end
