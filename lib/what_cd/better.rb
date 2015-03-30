@@ -37,7 +37,7 @@ module Better
 
       if configured_plugins
         # Run them
-        self.run_plugins(path, configured_plugins)
+        self.run_plugins(path, configured_plugins, quality)
       else
         @log.info "No plugins to run. Edit your config to enable plugins."
       end
@@ -46,13 +46,14 @@ module Better
     end 
   end
 
-  def self.run_plugins(path, configured_plugins)
+  def self.run_plugins(path, configured_plugins, quality)
     # Get this directory
     current_dir = File.dirname(__FILE__)
 
     # Set the context to be passed around between plugins
     context = {}
     context[:path] = path
+    context[:quality] = quality
 
     # Iterate over the configured plugins and dynamically execute them
     configured_plugins.each do |configured_plugin|

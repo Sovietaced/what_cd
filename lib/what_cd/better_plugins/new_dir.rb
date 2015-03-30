@@ -17,7 +17,24 @@ class NewDir
   end
 
   def better(context)
-    context
+    path = context[:path]
+    quality = context[:quality]
+    new_path = determine_new_dir_name(path, quality)
+
+    @log.info "Creating path for MP3 files at #{new_path}"
+    # Create the new directory if it does not exist
+    Dir.mkdir(new_path) unless File.exists?(new_path)
+  end
+
+    # Intelligently decide on a new directory name
+  def determine_new_dir_name(path, quality)
+    if path.include? 'FLAC'
+      return path.gsub 'FLAC', "MP3 #{quality}"
+    elsif path.include? 'flac'
+      return path.gsub! 'flac', "MP3 #{quality}"
+    else
+      return path.gsub! '/', " [MP3 #{quality}]"
+    end
   end
 
   def description
