@@ -24,6 +24,9 @@ class NewDir
     @log.info "Creating path for MP3 files at #{new_path}"
     # Create the new directory if it does not exist
     Dir.mkdir(new_path) unless File.exists?(new_path)
+
+    context[:new_path] = new_path
+    return context
   end
 
     # Intelligently decide on a new directory name
