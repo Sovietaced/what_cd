@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.add_dependency "yaml"
   s.add_dependency "logging"
   s.add_dependency "pathname"
+  s.add_dependency "flac2mp3"
 end
