@@ -17,7 +17,8 @@ class FileName
     end
   end
 
-  def sanitize(path)
+  def sanitize(context)
+    path = context[:path]
     Dir.chdir(path) { Dir["*.mp3"] }.each do |f|
       file_name = f
       file_path = path + file_name
@@ -30,7 +31,7 @@ class FileName
       end
     end
 
-    return nil
+    return context
   end
 
   def get_fixed_file_name(file_path)

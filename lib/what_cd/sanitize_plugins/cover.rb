@@ -16,7 +16,8 @@ class Cover
     end
   end
 
-  def sanitize(path)
+  def sanitize(context)
+    path = context[:path]
     images = Dir.chdir(path) { Dir["*.jpg"] }
 
     if images.count == 1
@@ -30,6 +31,6 @@ class Cover
       @log.debug "No .jpg files found in release directory."
     end
 
-    return nil
+    return context
   end
 end

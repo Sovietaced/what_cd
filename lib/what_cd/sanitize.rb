@@ -32,6 +32,10 @@ module Sanitize
     # Get this directory
     current_dir = File.dirname(__FILE__)
 
+    # Set the context to be passed around between plugins
+    context = {}
+    context[:path] = path
+
     # Iterate over the configured plugins and dynamically execute them
     configured_plugins.each do |configured_plugin|
       file = "#{current_dir}/sanitize_plugins/#{configured_plugin}.rb"
@@ -42,10 +46,8 @@ module Sanitize
       # Check to ensure ruby file defines a class
       if plugin.class == Class
         @log.info "Sanitizing with plugin #{plugin}"
-        new_path = plugin.new.sanitize(path)
-        @log.debug "new path returns as #{new_path}"
-        # Change operating path if a plugin has changed it
-        path = new_path if new_path
+        context = plugin.new.sanitize(context)
+        @log.debug "Context returned as #{context}"
       end
     end
   end

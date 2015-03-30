@@ -17,7 +17,8 @@ class Hidden
     end
   end
 
-  def sanitize(path)
+  def sanitize(context)
+    path = context[:path]
     Dir.entries(path).each do |entry|
       # We only want to remove hidden files... not directories. ASK ME HOW I KNOW!
       if !File.directory? entry
@@ -29,6 +30,6 @@ class Hidden
       end
     end
 
-    return nil
+    return context
   end
 end

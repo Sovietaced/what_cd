@@ -16,8 +16,8 @@ class DirName
     end
   end
 
-  def sanitize(path)
-    
+  def sanitize(context)
+    path = context[:path]
     # To get release info we need to look at an mp3
     file_path = get_first_mp3_path(path)
 
@@ -43,12 +43,12 @@ class DirName
           if new_dir != path.chomp("/")
             @log.debug "Renaming directory to #{new_dir}"
             File.rename(path, new_path)
-            return new_path
+            context[:path] = new_path
           end
         end
       end
     end
-    return nil
+    return context
   end
 
   def get_first_mp3_path(path)

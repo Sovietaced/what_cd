@@ -17,7 +17,8 @@ class Bitrate
     end
   end
 
-  def sanitize(path)
+  def sanitize(context)
+    path = context[:path]
     files = Dir.chdir(path) { Dir["*.mp3"] }
     return if files.empty?
 
@@ -56,7 +57,7 @@ class Bitrate
       @log.info "Constant bitrate detected at #{bitrate} kbps"
     end
 
-    return nil
+    return context
   end
 end
 

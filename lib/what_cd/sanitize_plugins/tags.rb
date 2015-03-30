@@ -17,7 +17,9 @@ class Tags
     end
   end
 
-  def sanitize(path)
+  def sanitize(context)
+    path = context[:path]
+    
     Dir.entries(path).each do |f|
       if !File.directory?(f) and File.extname(f) == ".mp3"
         file_path = path + f
@@ -33,6 +35,6 @@ class Tags
         end
       end
     end
-    return nil
+    return context
   end
 end
