@@ -29,6 +29,7 @@ module Sanitize
   end
 
   def self.run_plugins(path, configured_plugins)
+    @log.info "Sanitizing release located at #{path}"
     # Get this directory
     current_dir = File.dirname(__FILE__)
 
@@ -50,5 +51,7 @@ module Sanitize
         @log.debug "Context returned as #{context}"
       end
     end
+
+    @log.info "Sanitization finished. Sanitized release located at #{context[:path]}"
   end
 end
