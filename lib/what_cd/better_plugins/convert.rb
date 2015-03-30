@@ -1,4 +1,5 @@
 require 'logging'
+require 'flac2mp3'
 
 require File.expand_path("../better_plugin", __FILE__)
 
@@ -40,8 +41,7 @@ class Convert
 
     files.each do |flac_file|
       @log.info "Converting #{flac_file}"
-      cmd = "cd #{Shellwords.escape(path)}; flac2mp3 #{Shellwords.escape(flac_file)} --encoding='--preset #{preset}' > /dev/null 2>&1"
-      output = system "bash -c \"#{cmd}\""
+      Flac2mp3.convert(path + flac_file, :encoding => "--preset #{preset}")
     end
   end
 
