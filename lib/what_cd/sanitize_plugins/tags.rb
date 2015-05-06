@@ -24,11 +24,10 @@ class Tags
       if !File.directory?(f) and File.extname(f) == ".mp3"
         file_path = path + f
         Mp3Info.open(file_path) do |mp3|
+
           # Remove all comments
-          if not mp3.tag.comments.nil? or not mp3.tag2.COMM.nil?
-            mp3.tag.comments = nil
-            mp3.tag2.COMM = nil
-          end
+          mp3.tag.comments = nil
+          mp3.tag2.COMM = nil
 
           # Handle publisher tag
           mp3.tag2.TPUB = nil         
