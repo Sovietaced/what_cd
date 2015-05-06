@@ -34,11 +34,8 @@ class DirName
           if single_artist
             new_dir = "#{mp3.tag.artist} - #{new_dir}"
           end
-          
-          # Add year if available
-          if mp3.tag.year 
-            new_dir = "#{new_dir} [#{mp3.tag.year}]"
-          end
+
+          new_dir = handle_year_tags(mp3, new_dir)
 
           quality = get_quality_string(mp3.bitrate, mp3.vbr)
           new_dir = "#{new_dir} #{quality}"
@@ -86,6 +83,16 @@ class DirName
     end
 
     return false
+  end
+
+  def handle_year_tags(mp3, new_dir)
+    if mp3.tag.year 
+      new_dir = "#{new_dir} [#{mp3.tag.year}]"
+    elsif mp3.tag2.TDRC
+      new_dir = "#{new_dir} [#{mp3.tag2.TDRC}]"
+    end
+
+    return new_dir
   end
 
   def get_quality_string(bitrate, vbr)
