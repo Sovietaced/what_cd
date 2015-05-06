@@ -23,17 +23,25 @@ class DirName
 
     if file_path
       @log.debug "Opening file_path #{file_path}"
+
+      single_artist = is_single_artist?(path)
+
       Mp3Info.open(file_path) do |mp3|
         if mp3.tag.album
           new_dir = mp3.tag.album
+
+          # Prepend artist name if all tracks are by the same artist
+          if single_artist
+            new_dir = "#{mp3.tag.artist} - #{new_dir}"
+          end
           
           # Add year if available
           if mp3.tag.year 
-            new_dir = new_dir + " [#{mp3.tag.year}]"
+            new_dir = "#{new_dir} [#{mp3.tag.year}]"
           end
 
           quality = get_quality_string(mp3.bitrate, mp3.vbr)
-          new_dir = new_dir + " #{quality}"
+          new_dir = "#{new_dir} #{quality}"
 
           parts = path.split("/")
           parts[-1] = new_dir
@@ -60,6 +68,24 @@ class DirName
     end
 
     return nil
+  end
+
+  def is_single_artist?(path)
+    artists = []
+    Dir.entries(path).each do |f|
+      if !File.directory?(f) and File.extname(f) == ".mp3"
+        file_path = path + f
+        Mp3Info.open(file_path) do |mp3|
+          artists.push(mp3.tag.artist)
+        end
+      end
+    end
+
+    if artists.uniq.count == 1
+      return true
+    end
+
+    return false
   end
 
   def get_quality_string(bitrate, vbr)
