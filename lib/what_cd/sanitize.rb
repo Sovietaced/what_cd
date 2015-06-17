@@ -19,13 +19,14 @@ module Sanitize
     begin
       # Get config
       config = YAML.load_file(WhatCD::CONFIG)
+    rescue Errno::ENOENT
+      @log.error "Missing gem config file '~/.what_cd'"
+      return
+    end 
       # Get configured plugins
       configured_plugins = config['commands']['sanitize']['plugins']
       # Run them
       self.run_plugins(path, configured_plugins)
-    rescue Errno::ENOENT
-      @log.error "Missing gem config file '~/.what_cd'"
-    end 
   end
 
   def self.run_plugins(path, configured_plugins)

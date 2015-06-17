@@ -23,10 +23,9 @@ class FileName
       file_name = f
       file_path = path + file_name
 
-      new_file_name = get_fixed_file_name(file_path)
+      new_file_path = get_fixed_file_path(path, file_name)
 
-      if new_file_name != file_name
-        new_file_path = path + new_file_name
+      if new_file_path != file_path
         File.rename(file_path, new_file_path)
       end
     end
@@ -34,11 +33,12 @@ class FileName
     return context
   end
 
-  def get_fixed_file_name(file_path)
+  def get_fixed_file_path(path, file_name)
     # Return the original file_path by default
-    new_file_path = file_path
+    old_file_path = path + file_name
+    new_file_path = old_file_path
 
-    Mp3Info.open(file_path) do |mp3|
+    Mp3Info.open(old_file_path) do |mp3|
       if mp3.tag.title and mp3.tag.artist and mp3.tag.tracknum
         @log.debug "Reconstructing file name for #{file_path}"
         title = mp3.tag.title
@@ -61,7 +61,7 @@ class FileName
           title = title_part + " (#{remix_part})"
         end
 
-        new_file_path = "#{tracknum} #{artist} - #{title}" + File.extname(file_path)
+        new_file_path = path + "#{tracknum} #{artist} - #{title}" + File.extname(file_path)
       end
     end
 
