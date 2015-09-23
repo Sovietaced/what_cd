@@ -1,5 +1,6 @@
 require 'mp3info'
 require 'logging'
+require 'pathname'
 
 require File.expand_path("../sanitize_plugin", __FILE__)
 
@@ -28,7 +29,8 @@ class DirName
 
       Mp3Info.open(file_path) do |mp3|
         if mp3.tag.album
-          new_dir = mp3.tag.album
+          # backslash is used as a file-separator, it is converted to a colon in the filename used by Ruby
+          new_dir = mp3.tag.album.gsub( /\/|\\/, ':' )
 
           # Prepend artist name if all tracks are by the same artist
           if single_artist
