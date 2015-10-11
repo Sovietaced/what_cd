@@ -29,21 +29,24 @@ module Better
     setup_log(verbose)
 
     # Load configured plugins
+    # Load configured plugins
     begin
       # Get config
       config = YAML.load_file(WhatCD::CONFIG)
-      # Get configured plugins
-      configured_plugins = config['commands']['better']['plugins']
-
-      if configured_plugins
-        # Run them
-        self.run_plugins(path, configured_plugins, quality)
-      else
-        @log.info "No plugins to run. Edit your config to enable plugins."
-      end
     rescue Errno::ENOENT
       @log.error "Missing gem config file '~/.what_cd'"
+      return
     end 
+  
+    # Get configured plugins
+    configured_plugins = config['commands']['better']['plugins']
+
+    if configured_plugins
+      # Run them
+      self.run_plugins(path, configured_plugins, quality)
+    else
+      @log.info "No plugins to run. Edit your config to enable plugins."
+    end
   end
 
   def self.run_plugins(path, configured_plugins, quality)

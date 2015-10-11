@@ -34,9 +34,9 @@ class NewDir
     if path.include? 'FLAC'
       return path.gsub 'FLAC', "MP3 #{quality}"
     elsif path.include? 'flac'
-      return path.gsub! 'flac', "MP3 #{quality}"
+      return path.gsub 'flac', "MP3 #{quality}"
     else
-      return path.gsub! '/', " [MP3 #{quality}]"
+      return path.gsub '/', " [MP3 #{quality}]"
     end
   end
 

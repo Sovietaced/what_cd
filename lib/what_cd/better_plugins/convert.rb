@@ -26,7 +26,7 @@ class Convert
     elsif quality == "V0"
       convert(path, "extreme")
     else 
-      # rage
+      raise ArgumentError.new("Quality must be one of [320,V0]")
     end
 
     # Remove old flac files
