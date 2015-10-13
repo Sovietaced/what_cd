@@ -36,11 +36,10 @@ class Convert
   end
 
   def convert(path, preset) 
-
     files = Dir.chdir(path) { Dir["*.flac"] }
 
     files.each do |flac_file|
-      @log.info "Converting #{flac_file}"
+      @log.info "Converting #{path + flac_file}"
       Flac2mp3.convert(path + flac_file, :encoding => "--preset #{preset}")
     end
   end

@@ -31,8 +31,6 @@ module MakeTorrent
 
     # Get configured plugins
     tracker = config['commands']['torrent']['tracker']
-    
-    Dir.chdir path
 
     t = Torrent.new(tracker)
     t.set_private

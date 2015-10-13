@@ -20,7 +20,7 @@ class NewDir
     path = context[:path]
     quality = context[:quality]
     new_path = determine_new_dir_name(path, quality)
-
+    puts new_path
     @log.info "Creating path for MP3 files at #{new_path} and copying files over"
     # Create the new directory if it does not exist
     FileUtils.cp_r path, new_path unless File.exists?(new_path)
@@ -36,7 +36,7 @@ class NewDir
     elsif path.include? 'flac'
       return path.gsub 'flac', "MP3 #{quality}"
     else
-      return path.gsub '/', " [MP3 #{quality}]"
+      return path.gsub /\/$/, " [MP3 #{quality}]/"
     end
   end
 

@@ -70,9 +70,6 @@ command :make_torrent do |c|
 end
 
 def sanitize_path(path)
-  # Force add a trailing '/'
-  #path = path.chomp('/')
-  #path << '/'
 
   if (Pathname.new(path).absolute?)
     return path
